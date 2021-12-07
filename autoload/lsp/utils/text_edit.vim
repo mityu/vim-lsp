@@ -195,8 +195,12 @@ endfunction
 " _switch
 "
 function! s:_switch(path) abort
-  if bufnr(a:path) >= 0
-    execute printf('keepalt keepjumps %sbuffer!', bufnr(a:path))
+  let bufnr = str2nr(matchstr(a:path, '[/\\]__NO_NAME_\zs\d\+\ze__$'))
+  if bufnr == 0
+    let bufnr = bufnr(a:path)
+  endif
+  if bufnr >= 0
+    execute printf('keepalt keepjumps %sbuffer!', bufnr)
   else
     execute printf('keepalt keepjumps edit! %s', fnameescape(a:path))
   endif
